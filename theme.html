@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme Park Entry Form</title>
+<style>
+    .error {
+        color: red;
+    }
+</style>
+</head>
+<body>
+<h2>Theme Park Entry Form</h2>
+<form id="entryForm" onsubmit="return validateForm()">
+    <label for="ageCategory">Age Category:</label>
+    <select id="ageCategory" name="ageCategory" onchange="validateAge()">
+        <option value="">Select Age Category</option>
+        <option value="child">Child</option>
+        <option value="adult">Adult</option>
+        <option value="senior">Senior</option>
+    </select>
+    <br>
+    <label for="entryCategory">Entry Category:</label>
+    <select id="entryCategory" name="entryCategory">
+        <option value="">Select Entry Category</option>
+        <option value="college">College</option>
+        <option value="family">Family</option>
+    </select>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+<div id="errorMessage" class="error"></div>
+<div id="entryFees"></div>
+
+<script>
+function validateAge() {
+    var ageCategory = document.getElementById("ageCategory").value;
+    var age = parseInt(prompt("Enter Age:"));
+
+    if (ageCategory === "child" && age >= 12) {
+        alert("Children must be under 12 years old.");
+        document.getElementById("ageCategory").value = "";
+    } else if (ageCategory === "senior" && age < 60) {
+        alert("Seniors must be 60 years old or older.");
+        document.getElementById("ageCategory").value = "";
+    }
+}
+
+function validateForm() {
+    var ageCategory = document.getElementById("ageCategory").value;
+    var entryCategory = document.getElementById("entryCategory").value;
+
+    if (ageCategory === "" || entryCategory === "") {
+        document.getElementById("errorMessage").textContent = "Please select both age category and entry category.";
+        return false;
+    }
+
+    document.getElementById("errorMessage").textContent = "";
+
+    var entryFee = calculateEntryFee(ageCategory, entryCategory);
+    if (entryFee === 0) {
+        document.getElementById("errorMessage").textContent = "Invalid entry category.";
+        return false;
+    }
+
+    document.getElementById("entryFees").innerHTML = "<strong>Entry Fees:</strong><br>" + entryFee;
+
+    return true;
+}
+
+function calculateEntryFee(ageCategory, entryCategory) {
+    if (ageCategory === "child") {
+        return "Child: Rs.300";
+    } else if (ageCategory === "adult") {
+        if (entryCategory === "college") {
+            var groupSize = parseInt(prompt("Enter Group Size:"));
+            if (groupSize > 15) {
+                return "Adult (College): Rs.400";
+            } else {
+                return "Invalid entry category";
+            }
+        } else if (entryCategory === "family") {
+            return "Adult (Family): Rs.500";
+        }
+    } else if (ageCategory === "senior") {
+        return "Senior: Rs.450";
+    }
+
+    return "Invalid age category";
+}
+    
+</script>
+</body>
+</html>
